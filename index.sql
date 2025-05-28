@@ -171,5 +171,13 @@ Question 14 (ok)
 
 Question 15 : 
   Afficher les recettes qui ne nécessitent pas d’ingrédients coûtant plus de 2€ par unité de mesure
+  
+SELECT r.nom_recette
+FROM recette r
+INNER JOIN recette_ingredient ri ON r.id_recette = ri.id_recette
+INNER JOIN ingredient i ON ri.id_ingredient = i.id_ingredient
+GROUP BY r.id_recette
+HAVING MAX(i.prix) <= 2;
 
-
+Question 16 :
+  Afficher la / les recette(s) les plus rapides à préparer
