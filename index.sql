@@ -79,7 +79,7 @@ Question 5 :
   les instructions de votre choix. Pensez à alimenter votre base de données en conséquence afin de
   pouvoir lister les détails de cette recettes (ingrédients)
 
-Pour tout afficher
+Pour tout afficher (A refaire)
  
 SELECT 
   r.nom_recette,
@@ -171,7 +171,7 @@ Question 14 (ok)
 
 Question 15 : 
   Afficher les recettes qui ne nécessitent pas d’ingrédients coûtant plus de 2€ par unité de mesure
-  
+
 SELECT r.nom_recette
 FROM recette r
 INNER JOIN recette_ingredient ri ON r.id_recette = ri.id_recette
@@ -180,4 +180,8 @@ GROUP BY r.id_recette
 HAVING MAX(i.prix) <= 2;
 
 Question 16 :
-  Afficher la / les recette(s) les plus rapides à préparer
+  Afficher la / les recette(s) les plus rapides à préparer 
+
+SELECT r.nom_recette, r.temps_preparation
+FROM recette r
+ORDER BY temps_preparation ASC;
