@@ -187,6 +187,23 @@ Question 15 :
     GROUP BY r.id_recette
     HAVING MAX(i.prix) <= 2;
 
+
+  Afficher les recettes qui ne nécessitent pas d’ingrédients coûtant plus de 2€ par unité de mesure
+
+recette
+recette_ingredient
+ingredient
+
+Correction 
+SELECT *
+FROM recette r
+WHERE r.id_recette NOT IN (
+  SELECT r.id_recette
+  FROM recette r
+  INNER JOIN recette_ingredient ri ON r.id_recette = ri.id_recette
+  INNER JOIN ingredient i ON ri.id_ingredient = i.id_ingredient
+  WHERE i.prix > 2);
+
 Question 16 :
   Afficher la / les recette(s) les plus rapides à préparer 
 
@@ -194,19 +211,49 @@ Question 16 :
     FROM recette r
     ORDER BY temps_preparation ASC;
 
+  Correction 
+  SELECT *
+FROM recette r
+WHERE r.temps_preparation NOT IN (
+  SELECT r.temps_preparation
+  FROM recette r
+  WHERE r.temps_preparation > (
+    SELECT MIN(r.temps_preparation)
+    FROM recette r)
+    );
 
 Question 17 : 
   Trouver les recettes qui ne nécessitent aucun ingrédient (par exemple la recette de la tasse d’eau
   chaude qui consiste à verser de l’eau chaude dans une tasse)
+
+    SELECT r.nom_recette
+    FROM recette r
+    LEFT JOIN recette_ingredient ri ON r.id_recette = ri.id_recette
+
 
 Question 18 : 
   Trouver les ingrédients qui sont utilisés dans au moins 3 recettes
 
     SELECT * i.nom_ingredient,
     FROM ingredient i 
+    
+    SELECT 
+      i.nom_ingredient, 
+      COUNT(distinct ri.id_recette) AS nb_recettes
+    FROM 
+      ingredient i
+    INNER JOIN 
+      recette_ingredient ri ON i.id_ingredient = ri.id_ingredient
+    GROUP BY 
+      i.id_ingredient
+    HAVING 
+      COUNT(distinct ri.id_recette) >= 3;
 
 Question 19 : 
   Ajouter un nouvel ingrédient à une recette spécifique
+  
+    INSERT INTO recette_ingredient (id_recette, id_ingredient, quantite, unite)
+    VALUES (5, 15, 1, 'gramme');
 
 Question 20 : 
   Bonus : Trouver la recette la plus coûteuse de la base de données (il peut y avoir des ex aequo, il est
