@@ -79,45 +79,47 @@ Question 5 :
   les instructions de votre choix. Pensez à alimenter votre base de données en conséquence afin de
   pouvoir lister les détails de cette recettes (ingrédients)
 
-Pour tout afficher (A refaire)
- 
-SELECT 
-  r.nom_recette,
-  c.nom_categorie,
-  r.temps_preparation,
-  i.nom_ingredient,
-  ri.quantité,
-  i.unité
-FROM 
-  recette r
-INNER JOIN 
-  categorie c  r.id_categorie = c.id_categorie
-INNER JOIN 
-  recette_ingredient ri ON r.id_recette = ri.id_recette
-INNER JOIN 
-  ingredient i ON ri.id_ingredient = i.id_ingredient
-WHERE 
-  r.id_recette;
+      Étape 1 – Insérer la recette dans la table recette
 
+        INSERT INTO recette (nom_recette, temps_preparation, instructions, id_categorie)
+        VALUES ('Pâtes à la carbonara', '00:20:00', 'Faire cuire les pâtes. Ajouter les œufs, le parmesan et les lardons.', 2);
 
-Question 6 : (ok)
+      Étape 2 – Vérifier que la recette a bien été insérée
+
+        SELECT * FROM recette WHERE nom_recette = 'Pâtes à la carbonara';
+
+Question 6 : (ok) Utiliser Update
   Modifier le nom de la recette ayant comme identifiant id_recette = 3 (nom de la recette à votre
-convenance)
+  convenance)
 
-Question 7 : (ok)
+    Étape 1 : Modification
+
+      UPDATE recette
+      SET nom_recette = 'Salade estivale'
+      WHERE id_recette = 3;
+
+    Etape 2 : Verification 
+
+      SELECT * FROM recette WHERE id_recette = 3;
+
+Question 7 : (ok) Utiliser Delete 
   Supprimer la recette n°2 de la base de données
-
+  
+    SELECT * FROM recette WHERE id_recette = 2;
+  
 Question 8 :
   Afficher le prix total de la recette n°5
 
-SELECT
-  SUM(ri.quantité * i.prix) AS prix_total
-FROM
-  recette_ingredient ri
-INNER JOIN
-  ingredient i ON ri.id_ingredient = i.id_ingredient
-WHERE
-  ri.id_recette = 5;
+    SELECT 
+      SUM(i.prix) AS prix_total
+    FROM 
+      recette r
+    INNER JOIN 
+      recette_ingredient ri ON r.id_recette = ri.id_recette
+    INNER JOIN 
+      ingredient i ON ri.id_ingredient = i.id_ingredient
+    WHERE 
+      r.id_recette = 5;
 
 Question 9 : 
 Afficher le détail de la recette n°5 (liste des ingrédients, quantités et prix)
@@ -185,3 +187,21 @@ Question 16 :
 SELECT r.nom_recette, r.temps_preparation
 FROM recette r
 ORDER BY temps_preparation ASC;
+
+
+Question 17 : 
+Trouver les recettes qui ne nécessitent aucun ingrédient (par exemple la recette de la tasse d’eau
+chaude qui consiste à verser de l’eau chaude dans une tasse)
+
+Question 18 : 
+Trouver les ingrédients qui sont utilisés dans au moins 3 recettes
+
+SELECT * i.nom_ingredient,
+FROM ingredient i 
+
+Question 19 : 
+Ajouter un nouvel ingrédient à une recette spécifique
+
+Question 20 : 
+Bonus : Trouver la recette la plus coûteuse de la base de données (il peut y avoir des ex aequo, il est
+donc exclu d’utiliser la clause LIMIT)
